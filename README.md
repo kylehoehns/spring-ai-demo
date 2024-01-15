@@ -8,7 +8,7 @@ This repository was used as reference during a talk for the [Central Iowa Java U
 
 * Create an [OpenAI](https://openai.com/) account and [get an API key](https://platform.openai.com/api-keys).
 * Set up [billing settings](https://platform.openai.com/account/billing/overview) for your account with a small spending limit.
-* Set an environment variable named `SPRING_AI_OPENAI_API_KEY` to your OpenAI API key, or populate the key value in `application.yaml`.
+* Create an environment variable named `SPRING_AI_OPENAI_API_KEY` that is set to your OpenAI API key, or populate the key value in ['application.yaml`](/src/main/resources/application.yaml).
 * Install Java 21 or later.
 * Run `./gradlew bootRun` to start the application.
 
