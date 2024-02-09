@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.ChatResponse;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.parser.BeanOutputParser;
-import org.springframework.ai.prompt.Prompt;
-import org.springframework.ai.prompt.SystemPromptTemplate;
-import org.springframework.ai.prompt.messages.Message;
-import org.springframework.ai.prompt.messages.UserMessage;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.beans.factory.annotation.Value;
@@ -99,11 +99,11 @@ public class StatRestController {
 
     log.info("\nPrompt\n {}", prompt);
 
-    ChatResponse chatResponse = chatClient.generate(prompt);
+    ChatResponse chatResponse = chatClient.call(prompt);
 
-    log.info("Total Tokens {}", chatResponse.getGenerationMetadata().getUsage().getTotalTokens());
+    log.info("Total Tokens {}", chatResponse.getMetadata().getUsage().getTotalTokens());
 
-    String response = chatResponse.getGeneration().getContent();
+    String response = chatResponse.getResult().getOutput().getContent();
 
     log.info("\nResponse\n {}", response);
     return outputParser.parse(response);
