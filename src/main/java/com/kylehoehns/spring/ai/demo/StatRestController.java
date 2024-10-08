@@ -2,14 +2,13 @@ package com.kylehoehns.spring.ai.demo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ai.chat.ChatClient;
-import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
+import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.parser.BeanOutputParser;
 import org.springframework.ai.reader.TextReader;
 import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StatRestController {
 
-  private final ChatClient chatClient;
+  private final ChatModel chatModel;
   private final ResourceLoader resourceLoader;
   private final SimpleVectorStore simpleVectorStore;
 
@@ -68,7 +67,7 @@ public class StatRestController {
 
     UserMessage userMessage = new UserMessage(request.question());
 
-    var outputParser = new BeanOutputParser<>(StatResponse.class);
+    var outputConverter = new BeanOutputConverter<>(StatResponse.class);
 
     List<Document> similarDocuments = simpleVectorStore.similaritySearch(request.question());
 
@@ -90,23 +89,24 @@ public class StatRestController {
     Message systemMessage = systemPromptTemplate.createMessage(
         Map.of(
             "sport", request.sport(),
-            "format", outputParser.getFormat(),
+            "format", outputConverter.getFormat(),
             "documents", documentText
         )
     );
 
-    Prompt prompt = new Prompt(List.of(userMessage, systemMessage));
+    Prompt prompt = new Prompt(
+            List.of(userMessage, systemMessage)
+    );
 
     log.info("\nPrompt\n {}", prompt);
 
-    ChatResponse chatResponse = chatClient.call(prompt);
+    var response = chatModel.call(prompt);
+    log.info("Total Tokens {}", response.getMetadata().getUsage().getTotalTokens());
 
-    log.info("Total Tokens {}", chatResponse.getMetadata().getUsage().getTotalTokens());
+    String chatResponse = response.getResult().getOutput().getContent();
 
-    String response = chatResponse.getResult().getOutput().getContent();
-
-    log.info("\nResponse\n {}", response);
-    return outputParser.parse(response);
+    log.info("\nResponse\n {}", chatResponse);
+    return outputConverter.convert(chatResponse);
   }
 
 

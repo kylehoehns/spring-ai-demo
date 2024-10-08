@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.1'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.springframework.boot' version '3.3.4'
+	id 'io.spring.dependency-management' version '1.1.6'
 }
 
 group = 'com.kylehoehns'
@@ -25,8 +25,9 @@ repositories {
 }
 
 dependencies {
+	implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
+	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation "org.springframework.ai:spring-ai-openai-spring-boot-starter:0.8.0-SNAPSHOT"
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
