@@ -56,7 +56,6 @@ public class StatRestController {
     // add these to our vector store
     simpleVectorStore.add(documents);
 
-
     // persist to file
     simpleVectorStore.save(vectorStoreResource.getFile());
   }

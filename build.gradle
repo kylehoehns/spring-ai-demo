@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-	implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-SNAPSHOT")
+	implementation platform("org.springframework.ai:spring-ai-bom:1.0.0-M3")
 	implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 

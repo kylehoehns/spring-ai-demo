@@ -5,3 +5,6 @@ spring:
       chat:
         options:
           model: 'gpt-4o-mini'
+sports:
+  api:
+    key: 'your api key goes here'
