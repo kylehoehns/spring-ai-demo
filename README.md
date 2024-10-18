@@ -68,3 +68,4 @@ You'll receive a response like this:
 - [ ] Prompts and Templates
 - [ ] Output Parsing
 - [ ] RAG
+- [ ] Function Calling
