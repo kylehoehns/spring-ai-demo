@@ -53,10 +53,10 @@ You'll receive a response like this:
 
 ## Tech Stack
 
-* Spring Boot 3.2
+* Spring Boot 3.3
 * Spring Boot Starter Web
-* Spring Boot Spring AI OpenAI Starter
-  * Still under active development
+* Spring AI
+  * With Spring Boot Spring AI OpenAI Starter
 * Java 21
 * Lombok
 * Gradle
