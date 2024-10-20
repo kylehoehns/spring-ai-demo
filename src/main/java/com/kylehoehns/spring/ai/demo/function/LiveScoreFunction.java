@@ -11,7 +11,9 @@ import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.util.Map.entry;
 
@@ -80,19 +82,35 @@ public class LiveScoreFunction implements Function<LiveScoreFunction.ScoreReques
         ZoneId central = ZoneId.of("America/Chicago");
         ZonedDateTime nowCST = ZonedDateTime.now(central);
 
-        return gamesResponse.response.stream()
+        // Start of today in central time
+        ZonedDateTime startOfToday = nowCST.toLocalDate().atStartOfDay(central);
+        // End of today in central time
+        ZonedDateTime endOfToday = startOfToday.plusDays(1).minusNanos(1);
+
+        // First, check if there are any games played today
+        Optional<GameResponse> gameToday = gamesResponse.response.stream()
                 .filter(game -> {
                     ZonedDateTime gameDateCST = ZonedDateTime.ofInstant(
-                            Instant.ofEpochSecond(game.game().date().timestamp()),
-                            central
-                    );
-                    return gameDateCST.isBefore(nowCST) || gameDateCST.isEqual(nowCST);
+                            Instant.ofEpochSecond(game.game().date().timestamp()), central);
+                    // Check if the game is scheduled for today
+                    return !gameDateCST.isBefore(startOfToday) && !gameDateCST.isAfter(endOfToday);
                 })
                 .max(Comparator.comparing(game ->
-                        ZonedDateTime.ofInstant(Instant.ofEpochSecond(game.game().date().timestamp()),
-                                central)
+                        ZonedDateTime.ofInstant(Instant.ofEpochSecond(game.game().date().timestamp()), central)
+                ));
+
+        Supplier<GameResponse> mostRecentGameFromPast = () -> gamesResponse.response.stream()
+                .filter(game -> {
+                    ZonedDateTime gameDateCST = ZonedDateTime.ofInstant(
+                            Instant.ofEpochSecond(game.game().date().timestamp()), central);
+                    return gameDateCST.isBefore(nowCST);
+                })
+                .max(Comparator.comparing(game ->
+                        ZonedDateTime.ofInstant(Instant.ofEpochSecond(game.game().date().timestamp()), central)
                 ))
                 .orElse(null);
+
+        return gameToday.orElseGet(mostRecentGameFromPast);
     }
 
 
