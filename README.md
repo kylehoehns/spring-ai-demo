@@ -2,7 +2,7 @@
 
 This is a Spring Boot web application that uses [Spring AI](https://docs.spring.io/spring-ai/reference/) to talk with OpenAi models. It utilizes [retrieval augmented generation](https://ai.meta.com/blog/retrieval-augmented-generation-streamlining-the-creation-of-intelligent-natural-language-processing-models/) to answer questions about the [Iowa Hawkeyes football team for the 2023-24 season](https://hawkeyesports.com/sports/football/cumestats/season/2023-24/).
 
-This repository was used as reference during a talk for the [Central Iowa Java Users Group](https://www.meetup.com/central-iowa-java-users-group/) in [January 2024](https://www.meetup.com/central-iowa-java-users-group/events/298188550/). Slides for the talk can be found in this repository at [Spring AI.pdf](Spring%20AI.pdf)
+This repository was used as reference during a talk for the [Central Iowa Java Users Group](https://www.meetup.com/central-iowa-java-users-group/) in [January 2024](https://www.meetup.com/central-iowa-java-users-group/events/298188550/) and [Iowa Code Camp](https://iowacodecamp.com/) in October 2024. Slides for the talk can be found in this repository at [Spring AI.pdf](Spring%20AI.pdf)
 
 ## Setup
 
