@@ -70,10 +70,10 @@ public class LiveScoreFunction implements Function<LiveScoreFunction.ScoreReques
         var currentGame = mostRecentGame(response.getBody());
 
         var homeTeam = currentGame.teams().home().name();
-        var homeScore = currentGame.scores.home().total();
+        var homeScore = Optional.ofNullable(currentGame.scores.home().total()).orElse(0);
 
         var awayTeam = currentGame.teams().away().name();
-        var awayScore = currentGame.scores.away().total();
+        var awayScore = Optional.ofNullable(currentGame.scores.away().total()).orElse(0);
 
         return new ScoreResponse(homeTeam, homeScore, awayTeam, awayScore);
     }
@@ -117,7 +117,7 @@ public class LiveScoreFunction implements Function<LiveScoreFunction.ScoreReques
     public record ScoreRequest(String teamName) {
     }
 
-    public record ScoreResponse(String homeTeam, int homeScore, String awayTeam, int awayScore) {
+    public record ScoreResponse(String homeTeam, Integer homeScore, String awayTeam, Integer awayScore) {
     }
 
     private record GamesResponse(List<GameResponse> response) {
